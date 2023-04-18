@@ -19,27 +19,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.173" />
 
-    <TextView
-        android:id="@+id/RunningDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RunningSpeed" />
 
     <TextView
-        android:id="@+id/RunningDuration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="TextView"
+        android:id="@+id/elapsed_time_textview"
+        android:layout_width="196dp"
+        android:layout_height="25dp"
+        android:text="Elapsed time: 0 seconds"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RunningDistance" />
+        app:layout_constraintTop_toBottomOf="@+id/running_speed_textview" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
