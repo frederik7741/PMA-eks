@@ -7,7 +7,7 @@
     tools:context=".Run">
 
     <TextView
-        android:id="@+id/RunningSpeed"
+        android:id="@+id/running_speed_textview"
         android:layout_width="274dp"
         android:layout_height="115dp"
         android:text="Acceleration: 0.00 m/s^2"
