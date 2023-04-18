@@ -15,12 +15,12 @@ public class Run extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private TextView RunningSpeed;
     private Sensor accelerometer;
-
-    private long startTimeMillis = 0;
-
     private float[] gravity = new float[3];
     private float[] linear_acceleration = new float[3];
+
     private TextView elapsedTimeTextView;
+
+    private long startTimeMillis = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +33,18 @@ public class Run extends AppCompatActivity implements SensorEventListener {
 
         // initialize the RunningSpeed TextView
         RunningSpeed = findViewById(R.id.running_speed_textview);
-
         elapsedTimeTextView = findViewById(R.id.elapsed_time_textview);
     }
 
 
     @Override
     protected void onResume() {
-
-        startTimeMillis = System.currentTimeMillis();
-
         super.onResume();
         // register the sensor listener
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+
+        startTimeMillis = System.currentTimeMillis();
+
     }
 
     @Override
