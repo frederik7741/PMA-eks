@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +15,8 @@ public class Run extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
-
+    private TextView RunningSpeed;
+    private float acceleration;
     private long lastUpdateTime = 0;
     private float lastX = 0;
     private float lastY = 0;
@@ -23,11 +25,12 @@ public class Run extends AppCompatActivity implements SensorEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_run);
 
         // get a reference to the accelerometer sensor
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        RunningSpeed = findViewById(R.id.RunningSpeed);
     }
 
     @Override
@@ -48,7 +51,6 @@ public class Run extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         // check if the sensor type is accelerometer
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
@@ -58,7 +60,7 @@ public class Run extends AppCompatActivity implements SensorEventListener {
             float z = event.values[2];
 
             // calculate the acceleration magnitude
-            float acceleration = (float) Math.sqrt(x * x + y * y + z * z);
+            acceleration = (float) Math.sqrt(x * x + y * y + z * z);
 
             // calculate the time elapsed since the last update
             long currentTime = System.currentTimeMillis();
@@ -74,15 +76,27 @@ public class Run extends AppCompatActivity implements SensorEventListener {
             float distance = 0 + 0.5f * acceleration * elapsedTime * elapsedTime / 1000 / 1000;
 
             // log the velocity and distance
-            Log.d("MainActivity", "Velocity: " + velocity + " m/s");
-            Log.d("MainActivity", "Distance: " + distance + " m");
+            Log.d("RunActivity", "Velocity: " + velocity + " m/s");
+            Log.d("RunActivity", "Distance: " + distance + " m");
 
-            // update the last x, y, and z values
-            lastX = x;
-            lastY = y;
-            lastZ = z;
+            // update the RunningSpeed TextView with the new acceleration value
+            TextView RunningSpeed = findViewById(R.id.RunningSpeed);
+            String formattedAcceleration = String.format("%.1f", acceleration);
+            RunningSpeed.setText("Speed: " + formattedAcceleration + " m/s");
+
+            // update the Distance TextView with the new distance value
+            TextView distanceTextView = findViewById(R.id.distanceTextView);
+            String formattedDistance = String.format("%.1f", distance);
+            distanceTextView.setText("Distance: " + formattedDistance + " m");
+
+            // update the Duration TextView with the new duration value
+            TextView durationTextView = findViewById(R.id.durationTextView);
+            String formattedDuration = String.format("%.1f", elapsedTime / 1000f);
+            durationTextView.setText("Duration: " + formattedDuration + " seconds");
         }
     }
+
+
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
