@@ -15,7 +15,8 @@ public class Run extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private TextView RunningSpeed;
     private Sensor accelerometer;
-    private TextView xTextView, yTextView, zTextView;
+    private float[] gravity = new float[3];
+    private float[] linear_acceleration = new float[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +46,23 @@ public class Run extends AppCompatActivity implements SensorEventListener {
         sensorManager.unregisterListener(this);
     }
 
-    private static final float GRAVITY = 9.81f; // m/s^2
-    private float acceleration;
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         // check if the sensor type is accelerometer
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             // get the acceleration values in x, y, and z directions
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
+            final float alpha = 0.8f;
+            gravity[0] = alpha * gravity[0] + (1 - alpha) * event.values[0];
+            gravity[1] = alpha * gravity[1] + (1 - alpha) * event.values[1];
+            gravity[2] = alpha * gravity[2] + (1 - alpha) * event.values[2];
+
+            linear_acceleration[0] = event.values[0] - gravity[0];
+            linear_acceleration[1] = event.values[1] - gravity[1];
+            linear_acceleration[2] = event.values[2] - gravity[2];
 
             // calculate the combined acceleration
-            float netAcceleration = (float) Math.sqrt(x * x + y * y + z * z);
-
-            // subtract gravitational acceleration
-            acceleration = netAcceleration - GRAVITY;
+            float acceleration = (float) Math.sqrt(linear_acceleration[0] * linear_acceleration[0] +
+                    linear_acceleration[1] * linear_acceleration[1] + linear_acceleration[2] * linear_acceleration[2]);
 
             // update the TextView with the acceleration value
             String formattedAcceleration = String.format("%.1f", acceleration);
