@@ -6,8 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +18,13 @@ public class Run extends AppCompatActivity implements SensorEventListener {
     private TextView RunningDuration;
     private TextView RunningDistance;
     private long startTime = 0;
+    private long lastUpdateTime = 0;
     private float distance = 0;
     private float lastX = 0;
     private float lastY = 0;
     private float lastZ = 0;
+    private float alpha = 0.8f; // low-pass filter alpha value
+    private float[] gravity = new float[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class Run extends AppCompatActivity implements SensorEventListener {
 
         // register the accelerometer sensor listener
         sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        startTime = SystemClock.elapsedRealtime(); // set the start time
+        lastUpdateTime = System.currentTimeMillis(); // set the last update time
     }
 
     @Override
@@ -82,7 +83,7 @@ public class Run extends AppCompatActivity implements SensorEventListener {
 
             // calculate the distance using the formula d = ut + 0.5at^2
             // where d is the distance traveled, u is the initial velocity (0), a is the total acceleration, and t is the time elapsed
-            distance += (0.5f * totalAcceleration * elapsedTime * elapsedTime / 1000000) + (velocity * elapsedTime / 1000);
+            distance += (velocity * elapsedTime / 1000) + (0.5f * totalAcceleration * elapsedTime * elapsedTime / 1000000);
 
             // update the last values for x, y, and z
             lastX = x;
@@ -102,10 +103,6 @@ public class Run extends AppCompatActivity implements SensorEventListener {
             RunningDistance.setText("Distance: " + formattedDistance + " m");
         }
     }
-
-
-
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
