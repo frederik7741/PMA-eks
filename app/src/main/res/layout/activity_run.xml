@@ -20,7 +20,7 @@
         app:layout_constraintVertical_bias="0.173" />
 
     <TextView
-        android:id="@+id/distanceTextView"
+        android:id="@+id/RunningDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/RunningSpeed" />
 
     <TextView
-        android:id="@+id/durationTextView"
+        android:id="@+id/RunningDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -41,5 +41,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/distanceTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/RunningDistance" />
 </androidx.constraintlayout.widget.ConstraintLayout>
