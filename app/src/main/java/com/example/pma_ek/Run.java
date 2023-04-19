@@ -34,6 +34,11 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     private TextView distanceTextView;
     private long startTimeMillis = 0;
     private float totalDistance = 0;
+    private final int MAX_SPEED_VALUES = 50; // keep track of last 50 speed values
+
+    private float[] speedValues = new float[MAX_SPEED_VALUES];
+
+    private int speedValuesIndex = 0; // index of the last speed value added to the array
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
 
@@ -80,7 +85,8 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         // check if location permission is granted
         if (checkLocationPermission()) {
             // request location updates
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.5f, this);
+
         }
 
         startTimeMillis = System.currentTimeMillis();
@@ -121,11 +127,32 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             // update the distance TextView
             String formattedDistance = String.format("%.2f", totalDistance);
             distanceTextView.setText("Distance: " + formattedDistance + " m");
+
+            // calculate the average speed for the last 5 seconds
+            long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
+            int numSpeedValues = Math.min(speedValuesIndex, MAX_SPEED_VALUES);
+            float totalSpeed = 0;
+            int count = 0;
+            for (int i = speedValuesIndex - 1; i >= speedValuesIndex - numSpeedValues; i--) {
+                if (i < 0) {
+                    i += MAX_SPEED_VALUES;
+                }
+                totalSpeed += speedValues[i];
+                count++;
+            }
+            float averageSpeed = totalSpeed / count;
+            if (elapsedTimeMillis >= 5000) {
+                String formattedSpeed = String.format("%.1f", averageSpeed);
+                RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
+            }
         }
     }
 
+
     @Override
     public void onSensorChanged(SensorEvent event) {
+
+
         // check if the sensor type is accelerometer
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             // get the acceleration values in x, y, and z directions
@@ -149,6 +176,12 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             long elapsedTimeSeconds = (System.currentTimeMillis() - startTimeMillis) / 1000;
             String formattedElapsedTime = String.format("%d seconds", elapsedTimeSeconds);
             elapsedTimeTextView.setText("Elapsed time: " + formattedElapsedTime);
+
+
+// add the speed value to the array
+            speedValues[speedValuesIndex] = acceleration;
+            speedValuesIndex = (speedValuesIndex + 1) % MAX_SPEED_VALUES;
+
 
         }
     }
