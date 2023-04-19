@@ -58,6 +58,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
         // initialize handler and runnable for showing the zombie fragment
         handler = new Handler();
@@ -66,6 +67,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             public void run() {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
                 fragmentTransaction.replace(R.id.fragment_container, new Zombie());
                 fragmentTransaction.commit();
             }
