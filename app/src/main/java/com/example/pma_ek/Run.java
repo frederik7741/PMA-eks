@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -17,6 +19,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.Manifest;
+import android.os.Handler;
 
 
 public class Run extends AppCompatActivity implements SensorEventListener, LocationListener {
@@ -43,6 +46,10 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
 
+    private Handler handler;
+
+    private Runnable showZombieRunnable;
+
 
 
 
@@ -52,29 +59,26 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
 
-        // initialize the sensor manager and accelerometer sensor
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        // initialize handler and runnable for showing the zombie fragment
+        handler = new Handler();
+        showZombieRunnable = new Runnable() {
+            @Override
+            public void run() {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new Zombie());
+                fragmentTransaction.commit();
+            }
+        };
 
-        // initialize the RunningSpeed TextView
-        RunningSpeed = findViewById(R.id.running_speed_textview);
-        elapsedTimeTextView = findViewById(R.id.elapsed_time_textview);
+        // start the timer for the run
+        startTimeMillis = System.currentTimeMillis();
 
-        // initialize the location manager
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        // initialize the distance TextView
-        distanceTextView = findViewById(R.id.distance_textview);
-
-        //Dette bliver brugt til zombie popu
-        // Add the Zombie fragment to the container view
-
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, new Zombie())
-                .commit();
-
-
+        // set a delay of 5 seconds before showing the zombie fragment
+        handler.postDelayed(showZombieRunnable, 5000);
     }
+
+
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -99,18 +103,16 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         if (checkLocationPermission()) {
             // request location updates
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.5f, this);
-
         }
 
         startTimeMillis = System.currentTimeMillis();
 
-        //dette bliver brugt til Zombie popup
-
-
     }
 
 
-    @Override
+
+
+        @Override
     protected void onPause() {
         super.onPause();
         // unregister the sensor listener
