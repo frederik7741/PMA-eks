@@ -128,7 +128,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             String formattedDistance = String.format("%.2f", totalDistance);
             distanceTextView.setText("Distance: " + formattedDistance + " m");
 
-            // calculate the average speed for the last 5 seconds
+            // calculate the average speed for the last 5 seconds.
             long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
             int numSpeedValues = Math.min(speedValuesIndex, MAX_SPEED_VALUES);
             float totalSpeed = 0;
