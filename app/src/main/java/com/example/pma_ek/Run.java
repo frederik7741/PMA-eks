@@ -3,6 +3,7 @@ package com.example.pma_ek;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -43,6 +44,9 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
 
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,15 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
 
         // initialize the distance TextView
         distanceTextView = findViewById(R.id.distance_textview);
+
+        //Dette bliver brugt til zombie popu
+        // Add the Zombie fragment to the container view
+
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, new Zombie())
+                .commit();
+
+
     }
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -90,6 +103,10 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         }
 
         startTimeMillis = System.currentTimeMillis();
+
+        //dette bliver brugt til Zombie popup
+
+
     }
 
 
@@ -98,11 +115,13 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         super.onPause();
         // unregister the sensor listener
         sensorManager.unregisterListener(this);
+        // Dette bliver brugt til Zombie popup
 
         // check if location permission is granted
         if (checkLocationPermission()) {
             // remove location updates
             locationManager.removeUpdates(this);
+
         }
 
         // calculate the elapsed time
@@ -191,4 +210,10 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // do nothing
     }
+
+
+
+
 }
+
+
