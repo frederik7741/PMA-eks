@@ -22,27 +22,29 @@
 
     <TextView
         android:id="@+id/running_speed_textview"
-        android:layout_width="317dp"
-        android:layout_height="88dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Acceleration: 0.00 m/s^2"
         android:textAlignment="center"
         android:textSize="25sp"
+        app:autoSizeTextType="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.104" />
+        app:layout_constraintVertical_bias="0.131" />
 
     <TextView
         android:id="@+id/elapsed_time_textview"
-        android:layout_width="207dp"
-        android:layout_height="52dp"
+        android:layout_width="255dp"
+        android:layout_height="47dp"
         android:gravity="center"
         android:text="Elapsed time: 0 seconds"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"
+        app:autoSizeTextType="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,6 +59,7 @@
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="20sp"
+        app:autoSizeTextType="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
