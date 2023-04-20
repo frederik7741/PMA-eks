@@ -85,7 +85,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         // check if location permission is granted
         if (checkLocationPermission()) {
             // request location updates
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0.5f, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 5f, this);
 
         }
 
