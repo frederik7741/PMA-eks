@@ -23,7 +23,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     private SensorManager sensorManager;
     private TextView RunningSpeed;
     private Sensor accelerometer;
-    private float[] gravity = new float[3];
+    private final float[] gravity = new float[3];
     private float[] linear_acceleration = new float[3];
 
     private TextView elapsedTimeTextView;
@@ -133,13 +133,14 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             int numSpeedValues = Math.min(speedValuesIndex, MAX_SPEED_VALUES);
             float totalSpeed = 0;
             int count = 0;
-            for (int i = speedValuesIndex - 1; i >= speedValuesIndex - numSpeedValues; i--) {
+            for (int i = speedValuesIndex - 1; i > speedValuesIndex - numSpeedValues - 1; i--) {
                 if (i < 0) {
                     i += MAX_SPEED_VALUES;
                 }
                 totalSpeed += speedValues[i];
                 count++;
             }
+
             float averageSpeed = totalSpeed / count;
             if (elapsedTimeMillis >= 5000) {
                 String formattedSpeed = String.format("%.1f", averageSpeed);
