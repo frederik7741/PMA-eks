@@ -42,7 +42,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
 
-
+    private float THRESHOLD_SPEED = 0.5f;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +133,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             int numSpeedValues = Math.min(speedValuesIndex, MAX_SPEED_VALUES);
             float totalSpeed = 0;
             int count = 0;
-            for (int i = speedValuesIndex - 1; i > speedValuesIndex - numSpeedValues - 1; i--) {
+            for (int i = speedValuesIndex - 1; i >= speedValuesIndex - numSpeedValues; i--) {
                 if (i < 0) {
                     i += MAX_SPEED_VALUES;
                 }
@@ -142,15 +142,21 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             }
 
             float averageSpeed = totalSpeed / count;
+
             if (elapsedTimeMillis >= 5000) {
-                String formattedSpeed = String.format("%.1f", averageSpeed);
-                RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
+                if (averageSpeed >= THRESHOLD_SPEED) {
+                    String formattedSpeed = String.format("%.1f", averageSpeed);
+                    RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
+                } else {
+                    RunningSpeed.setText("Moving too slow to display speed");
+                }
             }
         }
     }
 
 
-    @Override
+
+        @Override
     public void onSensorChanged(SensorEvent event) {
 
 
@@ -171,8 +177,8 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
                     linear_acceleration[1] * linear_acceleration[1] + linear_acceleration[2] * linear_acceleration[2]);
 
             // update the TextView with the acceleration value
-            String formattedAcceleration = String.format("%.1f", acceleration);
-            RunningSpeed.setText("Speed: " + formattedAcceleration + " m/s");
+            //String formattedAcceleration = String.format("%.1f", acceleration);
+            //RunningSpeed.setText("Speed: " + formattedAcceleration + " m/s");
 
             long elapsedTimeSeconds = (System.currentTimeMillis() - startTimeMillis) / 1000;
             String formattedElapsedTime = String.format("%d seconds", elapsedTimeSeconds);
