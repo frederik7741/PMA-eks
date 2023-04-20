@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mediumButton.setActivated(false);
             hardButton.setActivated(true);
         }
+        Intent intent = new Intent(MainActivity.this, Run.class);
+        intent.putExtra("DIFFICULTY_LEVEL", Difficulty); // Add the difficulty level as an extra
+        startActivity(intent);
     }
+
 
     private void openActivityRun() {
         Intent intent = new Intent(this, Run.class);

@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -20,7 +21,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 import android.Manifest;
-
 
 public class Run extends AppCompatActivity implements SensorEventListener, LocationListener {
 
@@ -47,10 +47,17 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123;
 
     private float THRESHOLD_SPEED = 0.5f;
+
+    private int difficultyLevel; // Declare a variable to hold the difficulty level
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run);
+
+        // Retrieve the difficulty level from the intent
+        Intent intent = getIntent();
+        difficultyLevel = intent.getIntExtra("DIFFICULTY_LEVEL", 0);
 
         // initialize the sensor manager and accelerometer sensor
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -150,12 +157,13 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             long timer = System.currentTimeMillis() - startTimeMillis;
             long timer2 = System.currentTimeMillis();
             if (timer >= 1000) {
-                if (averageSpeed >= THRESHOLD_SPEED) {
+                if (averageSpeed >= THRESHOLD_SPEED * difficultyLevel) {
                     String formattedSpeed = String.format("%.1f", averageSpeed);
                     RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
                 } else {
                     RunningSpeed.setText("The zombies are closing in!");
                 }
+
                 // reset the start time and speed values index
                 timer2 = System.currentTimeMillis();
                 speedValuesIndex = 0;
