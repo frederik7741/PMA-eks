@@ -1,10 +1,12 @@
 package com.example.pma_ek;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -14,6 +16,8 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.TextView;
 import android.Manifest;
 
@@ -120,6 +124,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             if (previousLocation == null) {
                 previousLocation = location;
             }
+
             float distance = location.distanceTo(previousLocation);
             totalDistance += distance;
             previousLocation = location;
@@ -142,20 +147,25 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             }
 
             float averageSpeed = totalSpeed / count;
-
             if (elapsedTimeMillis >= 5000) {
                 if (averageSpeed >= THRESHOLD_SPEED) {
                     String formattedSpeed = String.format("%.1f", averageSpeed);
                     RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
                 } else {
-                    RunningSpeed.setText("Moving too slow to display speed");
+                    RunningSpeed.setText("The zombies are closing in!");
                 }
+                // reset the start time and speed values index
+                startTimeMillis = System.currentTimeMillis();
+                speedValuesIndex = 0;
+            } else {
+                RunningSpeed.setText("Moving too slow to display speed");
             }
+
+            // add current speed to the speed values array
+            speedValues[speedValuesIndex] = location.getSpeed();
+            speedValuesIndex = (speedValuesIndex + 1) % MAX_SPEED_VALUES;
         }
     }
-
-
-
         @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -189,7 +199,6 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
 
         }
     }
-
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
