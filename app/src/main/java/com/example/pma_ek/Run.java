@@ -176,9 +176,6 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             float acceleration = (float) Math.sqrt(linear_acceleration[0] * linear_acceleration[0] +
                     linear_acceleration[1] * linear_acceleration[1] + linear_acceleration[2] * linear_acceleration[2]);
 
-            // update the TextView with the acceleration value
-            //String formattedAcceleration = String.format("%.1f", acceleration);
-            //RunningSpeed.setText("Speed: " + formattedAcceleration + " m/s");
 
             long elapsedTimeSeconds = (System.currentTimeMillis() - startTimeMillis) / 1000;
             String formattedElapsedTime = String.format("%d seconds", elapsedTimeSeconds);
