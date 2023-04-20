@@ -133,7 +133,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             int numSpeedValues = Math.min(speedValuesIndex, MAX_SPEED_VALUES);
             float totalSpeed = 0;
             int count = 0;
-            for (int i = speedValuesIndex - 1; i > speedValuesIndex - numSpeedValues - 1; i--) {
+            for (int i = speedValuesIndex - 1; i >= speedValuesIndex - numSpeedValues; i--) {
                 if (i < 0) {
                     i += MAX_SPEED_VALUES;
                 }
@@ -141,7 +141,9 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
                 count++;
             }
 
+
             float averageSpeed = totalSpeed / count;
+
             if (elapsedTimeMillis >= 5000) {
                 String formattedSpeed = String.format("%.1f", averageSpeed);
                 RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
