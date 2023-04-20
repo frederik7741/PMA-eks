@@ -147,7 +147,9 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             }
 
             float averageSpeed = totalSpeed / count;
-            if (elapsedTimeMillis >= 5000) {
+            long timer = System.currentTimeMillis() - startTimeMillis;
+            long timer2 = System.currentTimeMillis();
+            if (timer >= 1000) {
                 if (averageSpeed >= THRESHOLD_SPEED) {
                     String formattedSpeed = String.format("%.1f", averageSpeed);
                     RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
@@ -155,7 +157,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
                     RunningSpeed.setText("The zombies are closing in!");
                 }
                 // reset the start time and speed values index
-                startTimeMillis = System.currentTimeMillis();
+                timer2 = System.currentTimeMillis();
                 speedValuesIndex = 0;
             } else {
                 RunningSpeed.setText("Moving too slow to display speed");
