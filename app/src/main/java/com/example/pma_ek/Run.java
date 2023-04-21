@@ -16,8 +16,11 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.TextView;
 import android.Manifest;
@@ -156,15 +159,20 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             float averageSpeed = totalSpeed / count;
             long timer = System.currentTimeMillis() - startTimeMillis;
             long timer2 = System.currentTimeMillis();
-            if (timer >= 1000) {
-                if (averageSpeed >= THRESHOLD_SPEED * difficultyLevel) {
-                    String formattedSpeed = String.format("%.1f", averageSpeed);
-                    RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
+            if (averageSpeed >= THRESHOLD_SPEED * difficultyLevel) {
+                String formattedSpeed = String.format("%.1f", averageSpeed);
+                RunningSpeed.setText("Average speed (last 5 sec): " + formattedSpeed + " m/s");
+            } else {
+                RunningSpeed.setText("The zombies are closing in!");
+                if (Build.VERSION.SDK_INT >= 26) {
+                    ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
                 } else {
-                    RunningSpeed.setText("The zombies are closing in!");
+                    ((Vibrator) getSystemService(VIBRATOR_SERVICE)).vibrate(500);
                 }
+            }
 
-                // reset the start time and speed values index
+
+            // reset the start time and speed values index
                 timer2 = System.currentTimeMillis();
                 speedValuesIndex = 0;
             } else {
@@ -175,7 +183,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             speedValues[speedValuesIndex] = location.getSpeed();
             speedValuesIndex = (speedValuesIndex + 1) % MAX_SPEED_VALUES;
         }
-    }
+
         @Override
     public void onSensorChanged(SensorEvent event) {
 
