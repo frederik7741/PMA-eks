@@ -27,6 +27,7 @@ import android.Manifest;
 
 public class Run extends AppCompatActivity implements SensorEventListener, LocationListener {
 
+    private TextView scoreTextView;
     private SensorManager sensorManager;
     private TextView RunningSpeed;
     private Sensor accelerometer;
@@ -75,6 +76,9 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
 
         // initialize the distance TextView
         distanceTextView = findViewById(R.id.distance_textview);
+
+        // initialize the score TextView
+        scoreTextView = findViewById(R.id.score_textview);
     }
     private boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -124,8 +128,31 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         long elapsedTimeSeconds = elapsedTimeMillis / 1000;
         String formattedElapsedTime = String.format("%d seconds", elapsedTimeSeconds);
         elapsedTimeTextView.setText("Elapsed time: " + formattedElapsedTime);
+
+
+    }
+    private void updateScore() {
+        float averageSpeed = getAverageSpeed();
+        float distanceCovered = totalDistance;
+        int score = Math.round(averageSpeed * distanceCovered * difficultyLevel);
+        scoreTextView.setText("Score: " + score);
     }
 
+    private float getAverageSpeed() {
+        long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
+        int numSpeedValues = Math.min(speedValuesIndex, MAX_SPEED_VALUES);
+        float totalSpeed = 0;
+        int count = 0;
+        for (int i = speedValuesIndex - 1; i >= speedValuesIndex - numSpeedValues; i--) {
+            if (i < 0) {
+                i += MAX_SPEED_VALUES;
+            }
+            totalSpeed += speedValues[i];
+            count++;
+        }
+
+        return totalSpeed / count;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -142,6 +169,10 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             // update the distance TextView
             String formattedDistance = String.format("%.2f", totalDistance);
             distanceTextView.setText("Distance: " + formattedDistance + " m");
+
+            // update the score TextView
+            updateScore();
+
 
             // calculate the average speed for the last 5 seconds.
             long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
