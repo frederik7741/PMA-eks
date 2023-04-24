@@ -128,7 +128,8 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         float averageSpeed = getAverageSpeed();
         float distanceCovered = totalDistance;
         int score = Math.round(averageSpeed * distanceCovered * difficultyLevel);
-        scoreTextView.setText("Score: " + score);
+        int fullscore = fullscore + score;
+        scoreTextView.setText("Score: " + fullscore);
     }
 
     private float getAverageSpeed() {
