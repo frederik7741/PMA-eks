@@ -114,14 +114,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     @Override
     protected void onPause() {
         super.onPause();
-        // unregister the sensor listener
-        sensorManager.unregisterListener(this);
 
-        // check if location permission is granted
-        if (checkLocationPermission()) {
-            // remove location updates
-            locationManager.removeUpdates(this);
-        }
 
         // calculate the elapsed time
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
@@ -213,7 +206,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
             // add current speed to the speed values array
             speedValues[speedValuesIndex] = location.getSpeed();
             speedValuesIndex = (speedValuesIndex + 1) % MAX_SPEED_VALUES;
-        }
+            }
 
         @Override
     public void onSensorChanged(SensorEvent event) {
