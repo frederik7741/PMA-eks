@@ -115,7 +115,6 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     protected void onPause() {
         super.onPause();
 
-
         // calculate the elapsed time
         long elapsedTimeMillis = System.currentTimeMillis() - startTimeMillis;
         long elapsedTimeSeconds = elapsedTimeMillis / 1000;

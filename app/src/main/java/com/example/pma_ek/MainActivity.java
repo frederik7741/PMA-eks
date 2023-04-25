@@ -26,13 +26,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mediumButton.setOnClickListener(this);
         hardButton.setOnClickListener(this);
 
-        button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivityRun();
-            }
-        });
+
+
     }
 
     @Override
@@ -70,8 +65,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void openActivityRun() {
-        Intent intent = new Intent(this, Run.class);
-        startActivity(intent);
-    }
+
 }
