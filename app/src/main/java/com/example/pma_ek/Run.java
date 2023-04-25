@@ -43,7 +43,7 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
     private long startTimeMillis = 0;
     private float totalDistance = 0;
     private final int MAX_SPEED_VALUES = 50; // keep track of last 50 speed values
-
+    int fullscore = 0;
     private float[] speedValues = new float[MAX_SPEED_VALUES];
 
     private int speedValuesIndex = 0; // index of the last speed value added to the array
@@ -127,7 +127,8 @@ public class Run extends AppCompatActivity implements SensorEventListener, Locat
         float averageSpeed = getAverageSpeed();
         float distanceCovered = totalDistance;
         int score = Math.round(averageSpeed * distanceCovered * difficultyLevel);
-        scoreTextView.setText("Score: " + score);
+        fullscore = fullscore + score;
+        scoreTextView.setText("Score: " + fullscore);
     }
 
     private float getAverageSpeed() {
